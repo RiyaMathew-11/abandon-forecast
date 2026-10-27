@@ -1,0 +1,16 @@
+The abandon-forecast derived dataset (the Zenodo bundle: data/derived-data/ tables, the
+gold set and its evidence bundles, and the data dictionary) is licensed under
+the Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+You are free to share and adapt the material for any purpose, including
+commercially, provided you give appropriate credit (see CITATION.cff).
+
+Full licence text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Upstream sources retain their own terms: the crates.io database dump is
+published by the Rust Foundation under CC0 1.0; the RustSec advisory-db is
+dual-licensed MIT / Apache-2.0; GitHub-derived columns are public repository
+metadata collected via the GitHub API under its terms of service.
+
+The pipeline source code in this repository is licensed separately; see the
+root LICENSE file.
