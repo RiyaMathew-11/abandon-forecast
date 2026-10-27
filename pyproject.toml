@@ -1,7 +1,8 @@
 [project]
 name = "abandon-forecast"
+license = "AGPL-3.0-or-later"
 version = "0.1.0"
-description = "Add your description here"
+description = "Point-in-time crates.io abandonment dataset and the forecasting pipeline behind cargo-pulse"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

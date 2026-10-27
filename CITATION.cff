@@ -6,6 +6,7 @@ version: 1.0.0
 date-released: 2026-10-18
 # doi: 10.5281/zenodo.XXXXXXX        # fill in once the Zenodo record is published
 repository-code: https://github.com/RiyaMathew-11/abandon-forecast
+license: AGPL-3.0-or-later
 authors:
   - family-names: Mathew
     given-names: Riya Prakash

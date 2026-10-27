@@ -128,7 +128,7 @@ DOIs/versions; cite the one you used.
 
 ## Licence
 
-Code: see `LICENSE`. Data (the Zenodo bundle): CC BY 4.0, see
+Code: AGPL-3.0-or-later (`LICENSE`), the same licence as cargo-pulse. Data (the Zenodo bundle): CC BY 4.0, see
 [`publication/LICENSE-DATA`](publication/LICENSE-DATA) (shipped inside the bundle as `LICENSE`). The crates.io dump and RustSec advisory-db are themselves
 public (CC0 / dual MIT–Apache-2.0); GitHub-derived columns are public
 repository metadata.

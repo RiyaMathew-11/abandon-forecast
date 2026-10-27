@@ -4,7 +4,7 @@ evidence bundle - the scaling half of the Xu et al. labeling pipeline
 stratified sample -> GitHub+registry evidence -> Claude -> manual
 verification of a subsample).
 
-The one design rule (anti-circularity): the label must NOT be "has it
+The one design rule (anti-circularity): the label must not be "has it
 committed lately?" - that would appoint the staleness rule as ground truth
 and the eval would grade models against staleness by construction. The
 prompt therefore forces the judgment onto semantic evidence (deprecation
@@ -22,7 +22,7 @@ merged date); rubric gains three clarifications - demand weighed by
 substance/freshness, bot activity is not maintainer life, and the
 finished-library allowance only covers crates that plausibly ARE finished.
 The amendments were informed by the 50-crate verification disagreements, so
-agreement re-scored on that same CSV is partly in-sample - noted in the log.
+agreement re-scored on that same CSV is partly in-sample.
 v1 labels are kept; the run ends with a v1-vs-v2 churn crosstab.
 
 Requires:  ANTHROPIC_API_KEY in the environment (or `ant auth login`),
