@@ -12,7 +12,6 @@ crates, a calibrated two-year abandonment probability.
 - **Tool**: [cargo-pulse](https://github.com/RiyaMathew-11/cargo-pulse)
   (`cargo install cargo-pulse`). Its model bundle is exported by this
   pipeline (`cargo-pulse/data/`).
-- **Paper**: submitted to the MSR 2027 Data and Tool Showcase.
 
 ## Three ways to run it
 
@@ -37,7 +36,7 @@ a committed sample. It reproduces the *method*, not the mining. See
 ### Reproduce the paper
 
 ```sh
-make fetch ZENODO=<record id>   # downloads + checksums the bundle into data/derived-data/
+make fetch ZENODO=<record id>   # downloads + checksums the bundle into data/derived-data/ (TBD)
 make reproduce                  # refit -> gold test -> calibrate -> export -> parity
 ```
 
