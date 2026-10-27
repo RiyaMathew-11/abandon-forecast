@@ -1,0 +1,16 @@
+[project]
+name = "abandon-forecast"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=0.121.0",
+    "duckdb>=1.5.4",
+    "matplotlib>=3.11.1",
+    "numpy>=2.5.1",
+    "pandas>=3.0.3",
+    "pyarrow>=25.0.0",
+    "scikit-learn>=1.9.0",
+    "xgboost>=3.3.0",
+]

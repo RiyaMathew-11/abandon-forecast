@@ -1,0 +1,14 @@
+# data lives on Zenodo (`make fetch`) or is rebuilt from a dump; never in git
+data/
+crates-data/*/data/
+crates-data/*/crates.duckdb
+crates-data/*.tar.gz
+crates-data/advisory-db/
+publication/zenodo/
+exploration/bench_fixtures/
+exploration/bench_results/
+
+.venv/
+__pycache__/
+target/
+.DS_Store

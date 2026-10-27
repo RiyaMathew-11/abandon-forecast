@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this dataset or pipeline, please cite it as below."
+type: dataset
+title: "crates.io package abandonment: point-in-time dataset, gold set and forecasting pipeline"
+version: 1.0.0
+date-released: 2026-10-18
+# doi: 10.5281/zenodo.XXXXXXX        # fill in once the Zenodo record is published
+repository-code: https://github.com/RiyaMathew-11/abandon-forecast
+authors:
+  - family-names: Mathew
+    given-names: Riya Prakash
+    affiliation: "School of Computer Science, University of Birmingham"
+  - family-names: Ali
+    given-names: Mubashir
+    affiliation: "School of Computer Science, University of Birmingham"
+  - family-names: Scandurra
+    given-names: Patrizia
+    affiliation: "DIGIP, University of Bergamo"
+keywords:
+  - crates.io
+  - Rust
+  - package abandonment
+  - software ecosystems
+  - survival analysis
+  - mining software repositories
+abstract: >-
+  Point-in-time feature tables for every mature crates.io package at yearly
+  cutoffs 2019-2024 plus a 2026 snapshot, GitHub maintainer-activity signals
+  reconstructed as of each cutoff, outcome labels derived from RustSec
+  advisories and repository archival, a 300-crate human/LLM-adjudicated gold
+  set, and the pipeline that builds them and trains the calibrated
+  abandonment-forecasting model shipped in cargo-pulse.
+related:
+  - type: software
+    title: cargo-pulse
+    url: https://crates.io/crates/cargo-pulse
