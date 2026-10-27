@@ -5,7 +5,7 @@
 #
 # Three ways in (see README):
 #   make demo                        offline, 20 s, committed sample
-#   make fetch ZENODO=<id> reproduce  Tier 1: retrain + grade + export from the archived tables
+#   make fetch reproduce             Tier 1: retrain + grade + export from the archived tables
 #   make db crates rustsec features … Tier 2: rebuild everything from a crates.io dump
 #
 # Provenance pins (the paper's snapshot; override DUMP/SNAP for your own):
@@ -20,7 +20,7 @@ T    ?= 2024-07-16                          # training / backtest cutoff
 SNAP ?= 2026-07-16                          # dump date == "now" for outcomes
 DUMP ?= crates-data/2026-07-16-020017       # extracted db-dump directory
 TAG  ?= adv_d2_lr0.03_n200_m20              # the shipped model's sweep config
-ZENODO ?=                                   # Zenodo record id for `make fetch`
+ZENODO ?= 23692551                           # Zenodo record id for `make fetch` (override for a new version)
 EXPORT ?= $(if $(wildcard cargo-pulse/Cargo.toml),cargo-pulse/data,data/export)  # model bundle out dir
 BUNDLE := abandon-forecast-derived-data-v1.tar.gz
 
@@ -30,7 +30,7 @@ export CARGO_PULSE_DATA := $(strip $(EXPORT))
 PY := uv run python
 
 .DEFAULT_GOAL := help
-.PHONY: help demo fetch fetch-sweep reproduce bundle db crates rustsec features mine outcomes train refit goldset calibrate export
+.PHONY: help demo fetch fetch-sweep reproduce bundle db crates rustsec features mine outcomes frames detect train refit goldset calibrate export
 
 help: ## Show the stage map
 	@echo "abandon-forecast pipeline — stages in build order (T=$(strip $(T)), snapshot $(strip $(SNAP)), dump $(strip $(DUMP)))"
@@ -38,8 +38,9 @@ help: ## Show the stage map
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-12s %s\n", $$1, $$2}'
 	@echo
 	@echo "Offline demo (~20 s):     make demo"
-	@echo "Reproduce the paper:      make fetch ZENODO=<record id> && make reproduce"
+	@echo "Reproduce the paper:      make fetch && make reproduce"
 	@echo "Full rebuild order:       db -> crates -> rustsec -> features -> mine -> outcomes -> refit -> goldset -> calibrate -> export"
+	@echo "Detection row (optional): frames -> detect   (after mine)"
 
 # ---------------------------------------------------------------- tier 0 / 1
 
@@ -102,6 +103,14 @@ mine: ## [prints only] GitHub mining (needs GITHUB_TOKEN; hours; resumable)
 
 outcomes: ## Forward outcomes in (T, snapshot] -> outcomes_<T>.parquet
 	$(PY) src/abandonment/make_outcomes.py $(strip $(T))
+
+frames: ## Snapshot-time PU frames for the detection row: features.py -> split.py -> make_labels.py (needs mine)
+	$(PY) src/abandonment/features.py
+	$(PY) src/abandonment/split.py
+	$(PY) src/abandonment/make_labels.py
+
+detect: ## Binary detection bake-off (results-table row 1) on the snapshot frames
+	$(PY) src/gbt/gbt_detect.py $(ARGS)
 
 train: ## Default-parameter bagged PU Cox ensemble at T -> backtest scores (ARGS=--cuda / --no-repo / --aft)
 	$(PY) src/gbt/gbt_survival.py $(strip $(T)) $(ARGS)

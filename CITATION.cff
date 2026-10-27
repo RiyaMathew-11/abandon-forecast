@@ -4,7 +4,7 @@ type: dataset
 title: "crates.io package abandonment: point-in-time dataset, gold set and forecasting pipeline"
 version: 1.0.0
 date-released: 2026-10-18
-# doi: 10.5281/zenodo.XXXXXXX        # fill in once the Zenodo record is published
+doi: 10.5281/zenodo.23692551
 repository-code: https://github.com/RiyaMathew-11/abandon-forecast
 license: AGPL-3.0-or-later
 authors:

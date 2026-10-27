@@ -21,7 +21,8 @@ OUT = ROOT / "publication" / "zenodo"
 VERSION = "v1"
 
 # What ships, as globs under data/derived-data/. Scratch outputs
-# (momentum_index_test*, examiner_*, goldset_labels v1 - exploratory runs) stay out.
+# (momentum_index_test*, examiner_*, pu_scores, arch_holdout/posmix results,
+# goldset_labels v1 - exploratory runs whose scripts are not shipped) stay out.
 MAIN = [
     "features_at_*.parquet", "outcomes_*.parquet",
     "repo_signals*.parquet", "repo_features.parquet", "archived_dates.parquet",
@@ -29,11 +30,11 @@ MAIN = [
     "crate_repos.parquet", "crate_owner_dates.parquet",
     "goldset_evidence_*.parquet", "goldset_labels_v2_*.parquet",
     "goldset_split_*.parquet", "goldset_sample_*.parquet", "goldset_verify_*.csv",
-    "backtest_scores_*.parquet", "pu_scores.parquet",
-    "train.parquet", "validation.parquet",
+    "backtest_scores_*.parquet",
+    "train.parquet", "validation.parquet",           # snapshot-time PU frames (detection row)
     "calibration_*.json",
     "sweep/scores_*_adv_d2_lr0.03_n200_m20_final.parquet",   # the shipped model's scores
-    "arch_holdout_results_*.csv", "posmix_results_*.csv", "sweep_results_*.csv",
+    "sweep_results_*.csv",
 ]
 SWEEP = ["sweep/*.parquet"]
 TOP = {  # top-level files inside every tarball

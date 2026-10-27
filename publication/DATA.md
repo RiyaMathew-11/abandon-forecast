@@ -84,6 +84,15 @@ model); 268 confidently decided (human/LLM, Cohen's κ = 0.438). Evidence
 bundles, per-crate label + confidence + reasoning, and a dev/sealed-test
 split (the test fold was read exactly once).
 
+### `train.parquet` / `validation.parquet` — 143,914 / 778 rows
+Snapshot-time (not point-in-time) PU frames behind the *detection* row of the
+results table: surface registry features at the snapshot for every eligible
+crate (`features.py`), split into the no-advisory pool (`train`) and the
+RustSec crates with their advisory columns (`validation`, `split.py`), with
+`is_abandoned` / `label_source` stamped by `make_labels.py` (advisory
+`unmaintained` OR owner-archived repository). Not used by the forecasting
+model.
+
 ### `backtest_scores_*.parquet` / `sweep/scores_*.parquet` — 91,437 rows each
 `name`, `risk_score` per model variant; the shipped variant is tag
 `adv_d2_lr0.03_n200_m20` (XGBoost `survival:cox`, 100 PU bags, depth 2,

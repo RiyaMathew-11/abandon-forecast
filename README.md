@@ -4,7 +4,7 @@ The dataset, mining pipeline and model training behind **cargo-pulse**, a
 cargo subcommand that reports recorded abandonment facts first and, for live
 crates, a calibrated two-year abandonment probability.
 
-- **Dataset** (Zenodo, DOI *to be added*): point-in-time feature tables for
+- **Dataset** (Zenodo, [10.5281/zenodo.23692551](https://doi.org/10.5281/zenodo.23692551)): point-in-time feature tables for
   every mature crate at yearly cutoffs 2019–2024 plus the 2026 snapshot,
   GitHub activity reconstructed *as of* each cutoff, outcome labels from
   RustSec advisories and repository archival, and a 300-crate human/LLM gold
@@ -18,7 +18,7 @@ crates, a calibrated two-year abandonment probability.
 | | Command | Needs | Time |
 |---|---|---|---|
 | **Demo** | `make demo` | nothing (committed 5.5k-crate sample) | ~20 s |
-| **Reproduce the paper** | `make fetch ZENODO=<id>` then `make reproduce` | the 55 MB Zenodo bundle | ~1 min on a laptop CPU |
+| **Reproduce the paper** | `make fetch` then `make reproduce` | the 59 MB Zenodo bundle | ~1 min on a laptop CPU |
 | **Rebuild from a dump** | `make db crates rustsec features mine outcomes refit goldset calibrate export` | a crates.io dump, `GITHUB_TOKEN`, `ANTHROPIC_API_KEY` | hours |
 
 Everything runs through [uv](https://docs.astral.sh/uv/) (`curl -LsSf
@@ -36,7 +36,7 @@ a committed sample. It reproduces the *method*, not the mining. See
 ### Reproduce the paper
 
 ```sh
-make fetch ZENODO=<record id>   # downloads + checksums the bundle into data/derived-data/ (TBD)
+make fetch                      # downloads + checksums the bundle (Zenodo 23692551) into data/derived-data/
 make reproduce                  # refit -> gold test -> calibrate -> export -> parity
 ```
 
@@ -59,7 +59,7 @@ shipped tool:
 Seeds are fixed (42) so a CPU run reproduces the archived scores; `ARGS=--cuda`
 on `make refit` trains on a GPU and may differ in the last decimal.
 Optional: `make fetch-sweep` adds the 800-configuration hyper-parameter
-sweep behind the paper's negative result (144 MB).
+sweep behind the paper's negative result (131 MB).
 
 ### Rebuild from a dump — bring your own snapshot
 
@@ -90,6 +90,7 @@ crates.io dump and run your own training/backtest experiment:
    make mine               # prints the three GitHub miners (GITHUB_TOKEN; hours)
    make outcomes T=2025-01-05
    make refit T=2025-01-05 # or `make train` for the default parameters
+   make frames detect      # optional: the binary detection row (snapshot-time frames)
    ```
    `gbt_refit.py` prints the backtest contrasts; `gold_eval.py` needs a gold
    set, which `make goldset` prints the chain for (LLM labelling needs an
