@@ -1,4 +1,4 @@
-# abandon-forecast — forecasting package abandonment on crates.io
+# abandon-forecast - forecasting package abandonment on crates.io
 
 The dataset, mining pipeline and model training behind **cargo-pulse**, a
 cargo subcommand that reports recorded abandonment facts first and, for live
@@ -43,16 +43,16 @@ make reproduce                  # refit -> gold test -> calibrate -> export -> p
 `reproduce` runs the five steps that produce the paper's numbers and the
 shipped tool:
 
-1. `gbt_refit.py` — refits the shipped configuration (`adv_d2_lr0.03_n200_m20`:
+1. `gbt_refit.py` - refits the shipped configuration (`adv_d2_lr0.03_n200_m20`:
    XGBoost `survival:cox`, 100 PU bags, depth 2, lr 0.03, 200 trees) at the
    backtest cutoff T = 2024-07-16 and prints the channel contrasts (archived
    vs proved-alive AUC, with the staleness bar beside it).
-2. `gold_eval.py --fold=test` — grades those scores on the sealed gold test fold.
-3. `calibrate.py` — fits the isotonic map from (score, age) to
+2. `gold_eval.py --fold=test` - grades scores on the sealed gold test fold.
+3. `calibrate.py` - fits the isotonic map from (score, age) to
    P(abandoned within ~2 y) on the gold dev fold.
-4. `export_artifacts.py` — freezes the ensemble, calibration, percentiles and
+4. `export_artifacts.py` - freezes the ensemble, calibration, percentiles and
    owner sidecar into `data/export/` (the bundle cargo-pulse ships).
-5. `cargo-pulse --parity`, with `CARGO_PULSE_DATA=data/export` — the installed
+5. `cargo-pulse --parity`, with `CARGO_PULSE_DATA=data/export` - the installed
    Rust scorer re-scores a 60-crate reference sample from that bundle and must
    match the Python model to 1e-3.
 
@@ -60,8 +60,11 @@ Seeds are fixed (42) so a CPU run reproduces the archived scores; `ARGS=--cuda`
 on `make refit` trains on a GPU and may differ in the last decimal.
 Optional: `make fetch-sweep` adds the 800-configuration hyper-parameter
 sweep behind the paper's negative result (131 MB).
+After `reproduce`, `uv run python exploration/shap_deployment_model.py`
+explains the refitted model with exact TreeSHAP and writes the two plots in
+`diagrams/` (mean |SHAP| per feature, and a per-crate beeswarm).
 
-### Rebuild from a dump — bring your own snapshot
+### Rebuild from a dump - bring your own snapshot
 
 The pipeline is not tied to our snapshot. To build the dataset from a fresh
 crates.io dump and run your own training/backtest experiment:
@@ -116,11 +119,34 @@ src/gbt/              XGBoost Cox/AFT training, refit, sweep, holdouts
 src/goldset/          gold-set sampling, evidence, LLM labelling, calibration
 src/cli/              export of the model bundle for cargo-pulse
 repro/                offline 20 s reproduction of the training method
+diagrams/             SHAP feature-effect plots of the shipped model (exploration/shap_deployment_model.py)
 publication/          data dictionary, data licence, Zenodo bundling
 data/derived-data/    the tables (gitignored; `make fetch` or the pipeline)
 data/export/          the exported model bundle for cargo-pulse
 crates-data/          load.sql (DuckDB loader); the dump and advisory-db live here, gitignored
 ```
+
+## Data sources and attribution
+
+Everything in the dataset is derived from public upstream sources. We are
+grateful to the teams that maintain them; please credit them as well as this
+dataset when you reuse it.
+
+| Source | What we take from it | Maintainer | Terms |
+|---|---|---|---|
+| [crates.io database dump](https://static.crates.io/db-dump.tar.gz) (`crates`, `versions`, `crate_owners`, `dependencies`, ...) | every registry feature, crate ages, crate-to-repository URLs, reverse-dependency counts | the crates.io team, [Rust Foundation](https://foundation.rust-lang.org/) | [crates.io data access policy](https://crates.io/data-access) |
+| [RustSec Advisory Database](https://github.com/rustsec/advisory-db) | `unmaintained` advisories as declared-abandonment labels and training positives; patched security advisories as evidence of a responsive maintainer | the [RustSec](https://rustsec.org/) project (Rust Secure Code WG) | public domain, except advisories imported from the GitHub Advisory Database, which are CC BY 4.0 and carry their source URL |
+| [GitHub GraphQL API](https://docs.github.com/en/graphql) and [REST API](https://docs.github.com/en/rest) | commit, issue and pull-request recency as of each cutoff; repository archival dates; the gold-set evidence bundles | [GitHub](https://github.com/) | [GitHub Terms of Service](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service); public repository metadata only, collected with a personal token under the documented rate limits |
+| [Anthropic API](https://docs.anthropic.com/) (`claude-sonnet-5`) | the LLM judge in the gold-set adjudication (`src/goldset/llm_label_goldset.py`); every judgement was then checked by a human | [Anthropic](https://www.anthropic.com/) | [Anthropic usage policy](https://www.anthropic.com/legal/aup) |
+
+The exact dump snapshot, advisory-db commit and mining dates are pinned in
+[`publication/DATA.md`](publication/DATA.md#provenance-pins).
+
+The companion tool, cargo-pulse, calls three more live services at audit
+time and is a client of them rather than a redistributor: the
+[crates.io API](https://crates.io/data-access) (paced, with an identifying
+`User-Agent` as its crawler policy asks), [OSV.dev](https://osv.dev/) for
+current RustSec advisories, and the GitHub REST API for repository state.
 
 ## Citing
 
@@ -130,6 +156,9 @@ DOIs/versions; cite the one you used.
 ## Licence
 
 Code: AGPL-3.0-or-later (`LICENSE`), the same licence as cargo-pulse. Data (the Zenodo bundle): CC BY 4.0, see
-[`publication/LICENSE-DATA`](publication/LICENSE-DATA) (shipped inside the bundle as `LICENSE`). The crates.io dump and RustSec advisory-db are themselves
-public (CC0 / dual MIT–Apache-2.0); GitHub-derived columns are public
-repository metadata.
+[`publication/LICENSE-DATA`](publication/LICENSE-DATA). Upstream sources keep their own terms, listed under
+[Data sources and attribution](#data-sources-and-attribution) above: the
+crates.io dump is governed by the crates.io data access policy, the RustSec
+advisory-db is public domain (CC BY 4.0 for advisories imported from the
+GitHub Advisory Database), and GitHub-derived columns are public repository
+metadata collected under GitHub's terms of service.

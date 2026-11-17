@@ -8,9 +8,14 @@ commercially, provided you give appropriate credit (see CITATION.cff).
 Full licence text: https://creativecommons.org/licenses/by/4.0/legalcode
 
 Upstream sources retain their own terms: the crates.io database dump is
-published by the Rust Foundation under CC0 1.0; the RustSec advisory-db is
-dual-licensed MIT / Apache-2.0; GitHub-derived columns are public repository
-metadata collected via the GitHub API under its terms of service.
+published by the crates.io team (Rust Foundation) and governed by the
+crates.io data access policy (https://crates.io/data-access); the RustSec
+Advisory Database (https://github.com/rustsec/advisory-db) places its
+content in the public domain, except advisories imported from the GitHub
+Advisory Database, which are CC BY 4.0 and carry their source URL;
+GitHub-derived columns are public repository metadata collected via the
+GitHub API under its terms of service. The gold-set judgements were produced
+with the Anthropic API and verified by a human.
 
 The pipeline source code in this repository is licensed separately; see the
 root LICENSE file.
